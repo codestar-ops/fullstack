@@ -1,0 +1,115 @@
+Q1 
+
+ login.html 
+ <!DOCTYPE html>
+<html>
+<head>
+  <title>User Login</title>
+</head>
+<body>
+  <h2>Login</h2>
+  <form action="/login" method="POST">
+    <label>Username:</label><br>
+    <input type="text" name="username" required><br><br>
+    <label>Password:</label><br>
+    <input type="password" name="password" required><br><br>
+    <button type="submit">Login</button>
+  </form>
+</body>
+</html>
+
+
+
+ server.js
+
+const http = require('http');
+const fs = require('fs');
+const querystring = require('querystring');
+
+// Sample user database (for demo purpose)
+const users = {
+  'john': '1234',
+  'admin': 'admin123',
+  'jane': 'password'
+};
+
+const server = http.createServer((req, res) => {
+  if (req.method === 'GET' && req.url === '/') {
+    // Serve login form
+    fs.readFile('login.html', (err, data) => {
+      if (err) {
+        res.writeHead(500);
+        return res.end('Error loading login form');
+      }
+      res.writeHead(200, { 'Content-Type': 'text/html' });
+      res.end(data);
+    });
+
+  } else if (req.method === 'POST' && req.url === '/login') {
+    // Handle login form submission
+    let body = '';
+
+    req.on('data', chunk => {
+      body += chunk.toString();
+    });
+
+    req.on('end', () => {
+      const formData = querystring.parse(body);
+      const { username, password } = formData;
+
+      if (users[username] && users[username] === password) {
+        res.writeHead(200, { 'Content-Type': 'text/html' });
+        res.end(`<h3>Welcome, ${username}!</h3><a href="/">Logout</a>`);
+      } else {
+        res.writeHead(401, { 'Content-Type': 'text/html' });
+        res.end(`<h3>Login failed. Invalid credentials.</h3><a href="/">Try again</a>`);
+      }
+    });
+
+  } else {
+    res.writeHead(404);
+    res.end('Page not found');
+  }
+});
+
+// Start server
+server.listen(3000, () => {
+  console.log('🔐 Login server running at http://localhost:3000/');
+});
+
+
+Q2
+
+selectTeachers.js
+const mysql = require('mysql');
+
+// Create DB connection
+const connection = mysql.createConnection({
+  host: 'localhost',
+  user: 'root',
+  password: '', // default for XAMPP
+  database: 'college' // change if yours is named differently
+});
+
+connection.connect((err) => {
+  if (err) throw err;
+  console.log(" Connected to the database.");
+
+  // Query to get all teachers
+  const queryAll = 'SELECT * FROM Teacher';
+
+  connection.query(queryAll, (err, results) => {
+    if (err) throw err;
+
+    console.log('\n All Teachers:');
+    console.table(results);
+
+    // Filter teachers with salary > 20000
+    const highPaid = results.filter(teacher => teacher.salary > 20000);
+
+    console.log('\n Teachers with Salary > 20000:');
+    console.table(highPaid);
+
+    connection.end();
+  });
+});

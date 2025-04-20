@@ -1,0 +1,118 @@
+Q1
+studentLogin.js
+
+const mysql = require('mysql');
+
+// Step 1: Create a connection without specifying a database
+const connection = mysql.createConnection({
+  host: 'localhost',
+  user: 'root',
+  password: '', // leave empty for XAMPP default
+});
+
+// Step 2: Connect to MySQL
+connection.connect((err) => {
+  if (err) throw err;
+  console.log('Connected to MySQL');
+
+  // Step 3: Create a new database called LibraryDB
+  connection.query('CREATE DATABASE IF NOT EXISTS studentDB', (err) => {
+    if (err) throw err;
+    console.log('Database "studentDB" created or already exists.');
+
+    // Step 4: Reconnect with the LibraryDB database selected
+    const db = mysql.createConnection({
+      host: 'localhost',
+      user: 'root',
+      password: '',
+      database: 'studentDB',
+    });
+
+    db.connect((err) => {
+      if (err) throw err;
+
+      // Step 5: Create the 'books' table
+      const createBooksTable = `
+        CREATE TABLE IF NOT EXISTS student  (
+          id INT AUTO_INCREMENT PRIMARY KEY,
+          name VARCHAR(255) NOT NULL,
+          address VARCHAR(255) NOT NULL,
+          percentage INT
+        )
+      `;
+
+      db.query(createBooksTable, (err) => {
+        if (err) throw err;
+        console.log('📖 Table "student" created successfully.');
+
+        // Step 6: Close the connection
+        db.end();
+      });
+    });
+  });
+});
+
+
+
+
+Q2
+
+<!DOCTYPE html>
+<html ng-app="userApp">
+<head>
+  <meta charset="UTF-8">
+  <title>Username & Password Validation</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+  <style>
+    input.ng-invalid.ng-dirty {
+      border: 2px solid red;
+    }
+    input.ng-valid.ng-dirty {
+      border: 2px solid green;
+    }
+  </style>
+</head>
+<body ng-controller="MainController">
+
+  <h2>User Login Validation</h2>
+
+  <form name="loginForm" ng-submit="validate()">
+    <label>Username:</label><br>
+    <input type="text" ng-model="username" name="username" required><br><br>
+
+    <label>Password:</label><br>
+    <input type="password" ng-model="password" name="password" required><br><br>
+
+    <button type="submit">Validate</button>
+  </form>
+
+  <p style="color: green;" ng-if="validMessage">{{ validMessage }}</p>
+
+  <script>
+    angular.module('userApp', [])
+      .controller('MainController', function($scope) {
+        $scope.validate = function () {
+          $scope.validMessage = '';
+
+          if (!$scope.username) {
+            alert("Enter username");
+            return;
+          }
+
+          if ($scope.username.length < 3) {
+            alert("Username is too short");
+            return;
+          }
+
+          if (!$scope.password || $scope.password.length < 8) {
+            alert("Password must be at least 8 characters");
+            return;
+          }
+
+          $scope.validMessage = "Valid username";
+        };
+      });
+  </script>
+
+</body>
+</html>

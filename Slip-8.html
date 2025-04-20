@@ -1,0 +1,339 @@
+Q1
+server.js
+const http = require('http');
+
+// Create a server
+const server = http.createServer((req, res) => {
+  res.writeHead(200, { 'Content-Type': 'text/html' });
+
+  res.write(`
+    <html>
+      <head>
+        <title>Simple Node.js Server</title>
+      </head>
+      <body>
+        <h1>Hello from Node.js Server!</h1>
+        <p>This is a simple web server using Node.js.</p>
+      </body>
+    </html>
+  `);
+
+  res.end();
+});
+
+// Server listens on port 3000
+server.listen(3000, () => {
+  console.log('🚀 Server running at http://localhost:3000/');
+});
+
+
+
+Q2
+<!DOCTYPE html>
+<html lang="en" ng-app="studentApp">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Details</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.3/angular.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f7fa;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 25px;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 25px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        th {
+            background-color: #f1f5f9;
+            color: #374151;
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+        }
+        
+        tr:hover {
+            background-color: #f9fafb;
+        }
+        
+        .search-box {
+            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        input[type="text"] {
+            width: 100%;
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
+        }
+        
+        .btn {
+            padding: 8px 15px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .btn-sort {
+            background-color: transparent;
+            color: #374151;
+            padding: 0;
+            margin-left: 5px;
+            cursor: pointer;
+            border: none;
+        }
+        
+        .female {
+            color: #e83e8c;
+        }
+        
+        .male {
+            color: #1e88e5;
+        }
+        
+        .status-active {
+            background-color: #d4edda;
+            color: #155724;
+            padding: 3px 8px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .status-inactive {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 3px 8px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" ng-controller="StudentController">
+        <h1>Student Details</h1>
+        
+        <div class="search-box">
+            <input type="text" ng-model="searchText" placeholder="Search students...">
+        </div>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>
+                        Name
+                        <button class="btn-sort" ng-click="sortBy('name')">↕</button>
+                    </th>
+                    <th>Age</th>
+                    <th>Gender</th>
+                    <th>Grade</th>
+                    <th>Major</th>
+                    <th>GPA</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="student in students | filter:searchText | orderBy:sortField">
+                    <td>{{ student.id }}</td>
+                    <td>{{ student.name }}</td>
+                    <td>{{ student.age }}</td>
+                    <td ng-class="{'female': student.gender === 'Female', 'male': student.gender === 'Male'}">
+                        {{ student.gender }}
+                    </td>
+                    <td>{{ student.grade }}</td>
+                    <td>{{ student.major }}</td>
+                    <td>{{ student.gpa }}</td>
+                    <td>{{ student.email }}</td>
+                    <td>{{ student.phone }}</td>
+                    <td>
+                        <span ng-class="{'status-active': student.isActive, 'status-inactive': !student.isActive}">
+                            {{ student.isActive ? 'Active' : 'Inactive' }}
+                        </span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        var app = angular.module('studentApp', []);
+        
+        app.controller('StudentController', ['$scope', function($scope) {
+            // Student data array with 10 students
+            $scope.students = [
+                {
+                    id: 1,
+                    name: 'John Smith',
+                    age: 20,
+                    gender: 'Male',
+                    grade: 'Junior',
+                    major: 'Computer Science',
+                    gpa: 3.8,
+                    email: 'john.smith@university.edu',
+                    phone: '(555) 123-4567',
+                    isActive: true
+                },
+                {
+                    id: 2,
+                    name: 'Sarah Johnson',
+                    age: 19,
+                    gender: 'Female',
+                    grade: 'Sophomore',
+                    major: 'Biology',
+                    gpa: 3.9,
+                    email: 'sarah.j@university.edu',
+                    phone: '(555) 234-5678',
+                    isActive: true
+                },
+                {
+                    id: 3,
+                    name: 'Michael Brown',
+                    age: 21,
+                    gender: 'Male',
+                    grade: 'Senior',
+                    major: 'Engineering',
+                    gpa: 3.5,
+                    email: 'michael.b@university.edu',
+                    phone: '(555) 345-6789',
+                    isActive: false
+                },
+                {
+                    id: 4,
+                    name: 'Emily Wilson',
+                    age: 20,
+                    gender: 'Female',
+                    grade: 'Junior',
+                    major: 'Psychology',
+                    gpa: 3.7,
+                    email: 'emily.w@university.edu',
+                    phone: '(555) 456-7890',
+                    isActive: true
+                },
+                {
+                    id: 5,
+                    name: 'David Lee',
+                    age: 22,
+                    gender: 'Male',
+                    grade: 'Senior',
+                    major: 'Business',
+                    gpa: 3.4,
+                    email: 'david.l@university.edu',
+                    phone: '(555) 567-8901',
+                    isActive: true
+                },
+                {
+                    id: 6,
+                    name: 'Jessica Chen',
+                    age: 19,
+                    gender: 'Female',
+                    grade: 'Sophomore',
+                    major: 'Chemistry',
+                    gpa: 4.0,
+                    email: 'jessica.c@university.edu',
+                    phone: '(555) 678-9012',
+                    isActive: true
+                },
+                {
+                    id: 7,
+                    name: 'Robert Kim',
+                    age: 21,
+                    gender: 'Male',
+                    grade: 'Junior',
+                    major: 'Physics',
+                    gpa: 3.6,
+                    email: 'robert.k@university.edu',
+                    phone: '(555) 789-0123',
+                    isActive: false
+                },
+                {
+                    id: 8,
+                    name: 'Amanda Garcia',
+                    age: 20,
+                    gender: 'Female',
+                    grade: 'Junior',
+                    major: 'Art History',
+                    gpa: 3.8,
+                    email: 'amanda.g@university.edu',
+                    phone: '(555) 890-1234',
+                    isActive: true
+                },
+                {
+                    id: 9,
+                    name: 'James Taylor',
+                    age: 22,
+                    gender: 'Male',
+                    grade: 'Senior',
+                    major: 'Mathematics',
+                    gpa: 3.9,
+                    email: 'james.t@university.edu',
+                    phone: '(555) 901-2345',
+                    isActive: true
+                },
+                {
+                    id: 10,
+                    name: 'Olivia Martinez',
+                    age: 19,
+                    gender: 'Female',
+                    grade: 'Sophomore',
+                    major: 'English',
+                    gpa: 3.7,
+                    email: 'olivia.m@university.edu',
+                    phone: '(555) 012-3456',
+                    isActive: false
+                }
+            ];
+            
+            // Default sort field
+            $scope.sortField = 'id';
+            
+            // Function to sort students
+            $scope.sortBy = function(field) {
+                $scope.sortField = field;
+            };
+        }]);
+    </script>
+</body>
+</html>

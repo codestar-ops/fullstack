@@ -1,0 +1,103 @@
+Q 1
+
+// reverseString.js
+
+const message = "Full Stack!";
+const reversed = message.split('').reverse().join('');
+console.log(reversed);
+
+
+
+Q 2
+fileForm.html
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Append File Contents</title>
+</head>
+<body>
+  <h2>Append one file to another</h2>
+  <form action="/append" method="POST">
+    <label>First file name (source):</label><br>
+    <input type="text" name="file1" required><br><br>
+
+    <label>Second file name (destination):</label><br>
+    <input type="text" name="file2" required><br><br>
+
+    <button type="submit">Append Content</button>
+  </form>
+</body>
+</html>
+
+
+server.js
+
+const http = require('http');
+const fs = require('fs');
+const path = require('path');
+const querystring = require('querystring');
+
+// Create the server
+const server = http.createServer((req, res) => {
+  if (req.method === 'GET' && req.url === '/') {
+    // Serve the HTML form
+    fs.readFile('fileForm.html', (err, data) => {
+      if (err) {
+        res.writeHead(500);
+        res.end('Error loading form.');
+        return;
+      }
+      res.writeHead(200, { 'Content-Type': 'text/html' });
+      res.end(data);
+    });
+
+  } else if (req.method === 'POST' && req.url === '/append') {
+    let body = '';
+
+    // Gather the form data
+    req.on('data', chunk => {
+      body += chunk.toString();
+    });
+
+    req.on('end', () => {
+      const formData = querystring.parse(body);
+      const file1 = formData.file1.trim();
+      const file2 = formData.file2.trim();
+
+      // Read content from file1
+      fs.readFile(file1, 'utf8', (err, data) => {
+        if (err) {
+          res.writeHead(404);
+          return res.end(`Error reading ${file1}`);
+        }
+
+        // Append to file2
+        fs.appendFile(file2, data, (err) => {
+          if (err) {
+            res.writeHead(500);
+            return res.end(`Error appending to ${file2}`);
+          }
+
+          res.writeHead(200, { 'Content-Type': 'text/plain' });
+          res.end(`Successfully appended contents of "${file1}" to "${file2}".`);
+        });
+      });
+    });
+  } else {
+    res.writeHead(404);
+    res.end('Not found');
+  }
+});
+
+// Start the server
+server.listen(3000, () => {
+  console.log('🚀 Server running at http://localhost:3000/');
+});
+
+
+File1.txt
+  hello
+
+File2.txt
+  world

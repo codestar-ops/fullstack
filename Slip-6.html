@@ -1,0 +1,234 @@
+Q1
+
+<!DOCTYPE html>
+<html lang="en" ng-app="clickApp">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AngularJS ng-click Example</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.3/angular.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 600px;
+            width: 100%;
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 25px;
+        }
+        .btn {
+            padding: 12px 24px;
+            background-color: #4285f4;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.1s;
+            margin: 10px;
+        }
+        .btn:hover {
+            background-color: #3367d6;
+        }
+        .btn:active {
+            transform: scale(0.98);
+        }
+        .btn-success {
+            background-color: #0f9d58;
+        }
+        .btn-success:hover {
+            background-color: #0b8043;
+        }
+        .btn-warning {
+            background-color: #f4b400;
+        }
+        .btn-warning:hover {
+            background-color: #f09300;
+        }
+        .btn-danger {
+            background-color: #db4437;
+        }
+        .btn-danger:hover {
+            background-color: #c53929;
+        }
+        .message-box {
+            margin-top: 30px;
+            padding: 15px;
+            border-radius: 4px;
+            background-color: #e8f0fe;
+            color: #333;
+        }
+        .message-text {
+            font-size: 16px;
+        }
+        .click-area {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border: 1px dashed #ccc;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .click-area:hover {
+            background-color: #e9ecef;
+        }
+        .image-btn {
+            margin-top: 20px;
+            display: inline-block;
+            cursor: pointer;
+        }
+        .image-btn img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            transition: transform 0.3s;
+        }
+        .image-btn:hover img {
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="container" ng-controller="ClickController">
+        <h1>AngularJS ng-click Examples</h1>
+        
+        <!-- Basic Button with ng-click -->
+        <button class="btn" ng-click="showAlert('Hello! You clicked the basic button.')">
+            Click Me
+        </button>
+        
+        <!-- Different Alert Messages for Different Buttons -->
+        <div>
+            <button class="btn btn-success" ng-click="showAlert('Success alert triggered!')">
+                Success Alert
+            </button>
+            
+            <button class="btn btn-warning" ng-click="showAlert('Warning alert triggered!')">
+                Warning Alert
+            </button>
+            
+            <button class="btn btn-danger" ng-click="showAlert('Danger alert triggered!')">
+                Danger Alert
+            </button>
+        </div>
+        
+        <!-- Display Message on the Page Instead of Alert -->
+        <div>
+            <button class="btn" ng-click="displayMessage('This message is displayed on the page instead of an alert dialog.')">
+                Show Message on Page
+            </button>
+        </div>
+        
+        <!-- Message Display Area -->
+        <div class="message-box" ng-show="message">
+            <p class="message-text">{{ message }}</p>
+        </div>
+        
+        <!-- Using ng-click on a div -->
+        <div class="click-area" ng-click="showAlert('You clicked on the div area!')">
+            <p>This is a clickable area (div). Click anywhere in this box to trigger an alert.</p>
+        </div>
+        
+        <!-- Using ng-click with image -->
+        <div class="image-btn" ng-click="showAlert('You clicked on the image!')">
+            <img src="/api/placeholder/100/100" alt="Clickable Image">
+        </div>
+        
+        <!-- Passing Parameters to the Click Handler -->
+        <div>
+            <button class="btn" ng-click="showCustomAlert('Hello', 'Custom Parameters')">
+                Alert with Parameters
+            </button>
+        </div>
+    </div>
+
+    <script>
+        var app = angular.module('clickApp', []);
+        
+        app.controller('ClickController', ['$scope', function($scope) {
+            // Initialize empty message
+            $scope.message = '';
+            
+            // Function to show an alert
+            $scope.showAlert = function(alertMessage) {
+                alert(alertMessage);
+            };
+            
+            // Function to display a message on the page
+            $scope.displayMessage = function(message) {
+                $scope.message = message;
+            };
+            
+            // Function with multiple parameters
+            $scope.showCustomAlert = function(greeting, param) {
+                alert(greeting + '! This alert uses ' + param + '.');
+            };
+        }]);
+    </script>
+</body>
+</html>
+
+
+
+Q2
+
+fileServer.js
+
+const http = require('http');
+const fs = require('fs');
+const path = require('path');
+const url = require('url');
+
+const server = http.createServer((req, res) => {
+  const parsedUrl = url.parse(req.url);
+  let filePath = `.${parsedUrl.pathname}`;
+
+  // Default to index.html if root is requested
+  if (filePath === './') {
+    filePath = './index.html';
+  }
+
+  const extname = String(path.extname(filePath)).toLowerCase();
+  const mimeTypes = {
+    '.html': 'text/html',
+    '.js': 'text/javascript',
+    '.css': 'text/css',
+    '.json': 'application/json',
+    '.png': 'image/png',
+    '.jpg': 'image/jpg',
+    '.gif': 'image/gif',
+    '.txt': 'text/plain',
+  };
+
+  const contentType = mimeTypes[extname] || 'application/octet-stream';
+
+  fs.readFile(filePath, (err, content) => {
+    if (err) {
+      res.writeHead(404, { 'Content-Type': 'text/plain' });
+      res.end('404 Not Found\n');
+    } else {
+      res.writeHead(200, { 'Content-Type': contentType });
+      res.end(content, 'utf-8');
+    }
+  });
+});
+
+server.listen(3000, () => {
+  console.log('🌐 Server running at http://localhost:3000/');
+});

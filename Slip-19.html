@@ -1,0 +1,103 @@
+Q1
+const message = "hello world!";
+
+// Convert to lowercase
+const upperCaseMessage = message.toUpperCase();
+
+// Output the result
+console.log("Original:", message);
+console.log("Uppercase:", upperCaseMessage);
+
+
+
+
+Q2
+
+
+<!DOCTYPE html>
+<html ng-app="myApp">
+<head>
+  <meta charset="UTF-8">
+  <title>SPA Form Validation</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+  <style>
+    input.ng-invalid.ng-dirty {
+      border: 2px solid red;
+    }
+    input.ng-valid.ng-dirty {
+      border: 2px solid green;
+    }
+    .error {
+      color: red;
+      font-size: 12px;
+    }
+  </style>
+</head>
+<body ng-controller="FormController">
+
+  <h2>Student Details Form</h2>
+  <form name="studentForm" novalidate ng-submit="submitForm()">
+
+    <label>Name:</label><br>
+    <input type="text" name="name" ng-model="student.name" ng-pattern="/^[A-Za-z ]+$/"
+           required>
+    <div class="error" ng-show="studentForm.name.$dirty && studentForm.name.$invalid">
+      Name must contain letters only.
+    </div><br>
+
+    <label>Address:</label><br>
+    <input type="text" name="address" ng-model="student.address"
+           ng-pattern="/^SPPU M\.Sc\. Computer Science Syllabus 2023-24$/"
+           required>
+    <div class="error" ng-show="studentForm.address.$dirty && studentForm.address.$invalid">
+      Address must match: "SPPU M.Sc. Computer Science Syllabus 2023-24"
+    </div><br>
+
+    <label>Mobile Number:</label><br>
+    <input type="text" name="mobile" ng-model="student.mobile"
+           ng-pattern="/^[0-9]{10}$/" required>
+    <div class="error" ng-show="studentForm.mobile.$dirty && studentForm.mobile.$invalid">
+      Mobile number must be exactly 10 digits.
+    </div><br>
+
+    <label>Pin Code:</label><br>
+    <input type="text" name="pincode" ng-model="student.pincode"
+           ng-pattern="/^[0-9]{6}$/" required>
+    <div class="error" ng-show="studentForm.pincode.$dirty && studentForm.pincode.$invalid">
+      Pin code must be exactly 6 digits.
+    </div><br>
+
+    <label>Email:</label><br>
+    <input type="email" name="email" ng-model="student.email"
+           ng-pattern="/^[^@]+@[^@]+\.[^@]+$/" required>
+    <div class="error" ng-show="studentForm.email.$dirty && studentForm.email.$invalid">
+      Email must contain one '@' and one '.' symbol.
+    </div><br>
+
+    <button type="submit" ng-disabled="studentForm.$invalid">Submit</button>
+  </form>
+
+  <div ng-if="submitted && studentForm.$valid">
+    <h3>Form Submitted Successfully!</h3>
+    <p><strong>Name:</strong> {{ student.name }}</p>
+    <p><strong>Address:</strong> {{ student.address }}</p>
+    <p><strong>Mobile:</strong> {{ student.mobile }}</p>
+    <p><strong>Pin Code:</strong> {{ student.pincode }}</p>
+    <p><strong>Email:</strong> {{ student.email }}</p>
+  </div>
+
+  <script>
+    angular.module('myApp', [])
+      .controller('FormController', function($scope) {
+        $scope.student = {};
+        $scope.submitted = false;
+
+        $scope.submitForm = function () {
+          if ($scope.studentForm.$valid) {
+            $scope.submitted = true;
+          }
+        };
+      });
+  </script>
+</body>
+</html>

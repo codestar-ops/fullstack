@@ -1,0 +1,344 @@
+Q 2
+
+
+<!DOCTYPE html>
+<html lang="en" ng-app="studentRegistrationApp">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Registration</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.3/angular.min.js"></script>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        body {
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        .greeting {
+            text-align: center;
+            font-size: 18px;
+            margin-bottom: 30px;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+            color: #2c3e50;
+        }
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+            gap: 20px;
+        }
+        .form-group {
+            flex: 1 0 200px;
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #34495e;
+        }
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        input:focus, select:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
+        }
+        input.ng-invalid.ng-touched {
+            border-color: #e74c3c;
+        }
+        .error {
+            color: #e74c3c;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        button:disabled {
+            background-color: #95a5a6;
+            cursor: not-allowed;
+        }
+        .required:after {
+            content: " *";
+            color: #e74c3c;
+        }
+        .success-message {
+            text-align: center;
+            color: #27ae60;
+            font-weight: bold;
+            margin-top: 15px;
+            padding: 10px;
+            background-color: #f0fff0;
+            border-radius: 4px;
+        }
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(0, 0, 0, 0.1);
+            border-radius: 50%;
+            border-top-color: #3498db;
+            animation: spin 1s ease-in-out infinite;
+            margin: 0 auto;
+            display: inline-block;
+            vertical-align: middle;
+            margin-right: 10px;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .loading-text {
+            display: inline-block;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body ng-controller="StudentController">
+    <div class="container">
+        <h1>Student Registration Form</h1>
+        
+        <!-- Time-based Greeting -->
+        <div class="greeting">
+            <div ng-show="timeOfDay === 'morning'">Good Morning! Welcome to Student Registration</div>
+            <div ng-show="timeOfDay === 'afternoon'">Good Afternoon! Welcome to Student Registration</div>
+            <div ng-show="timeOfDay === 'evening'">Good Evening! Welcome to Student Registration</div>
+            <div ng-show="timeOfDay === 'night'">Good Night! Welcome to Student Registration</div>
+        </div>
+        
+        <!-- Registration Form -->
+        <form name="studentForm" ng-submit="submitForm()" novalidate>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="firstName" class="required">First Name</label>
+                    <input type="text" id="firstName" name="firstName" 
+                           ng-model="student.firstName" 
+                           ng-pattern="/^[A-Za-z]+$/" 
+                           required>
+                    <div class="error" ng-show="studentForm.firstName.$touched && studentForm.firstName.$error.required">
+                        First name is required
+                    </div>
+                    <div class="error" ng-show="studentForm.firstName.$touched && studentForm.firstName.$error.pattern">
+                        First name should contain only alphabets
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="lastName" class="required">Last Name</label>
+                    <input type="text" id="lastName" name="lastName" 
+                           ng-model="student.lastName" 
+                           ng-pattern="/^[A-Za-z]+$/" 
+                           required>
+                    <div class="error" ng-show="studentForm.lastName.$touched && studentForm.lastName.$error.required">
+                        Last name is required
+                    </div>
+                    <div class="error" ng-show="studentForm.lastName.$touched && studentForm.lastName.$error.pattern">
+                        Last name should contain only alphabets
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="age" class="required">Age</label>
+                    <input type="number" id="age" name="age" 
+                           ng-model="student.age" 
+                           min="18" max="50" 
+                           required>
+                    <div class="error" ng-show="studentForm.age.$touched && studentForm.age.$error.required">
+                        Age is required
+                    </div>
+                    <div class="error" ng-show="studentForm.age.$touched && (studentForm.age.$error.min || studentForm.age.$error.max)">
+                        Age must be between 18 and 50
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="gender">Gender</label>
+                    <select id="gender" name="gender" ng-model="student.gender">
+                        <option value="">Select Gender</option>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="email" class="required">Email</label>
+                    <input type="email" id="email" name="email" 
+                           ng-model="student.email" 
+                           required>
+                    <div class="error" ng-show="studentForm.email.$touched && studentForm.email.$error.required">
+                        Email is required
+                    </div>
+                    <div class="error" ng-show="studentForm.email.$touched && studentForm.email.$error.email">
+                        Please enter a valid email address
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input type="tel" id="phone" name="phone" ng-model="student.phone">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="address">Address</label>
+                <input type="text" id="address" name="address" ng-model="student.address">
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="program" class="required">Program/Course</label>
+                    <select id="program" name="program" ng-model="student.program" required>
+                        <option value="">Select Program</option>
+                        <option value="computer_science">Computer Science</option>
+                        <option value="engineering">Engineering</option>
+                        <option value="business">Business</option>
+                        <option value="arts">Arts</option>
+                        <option value="science">Science</option>
+                    </select>
+                    <div class="error" ng-show="studentForm.program.$touched && studentForm.program.$error.required">
+                        Program is required
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="semester">Semester</label>
+                    <select id="semester" name="semester" ng-model="student.semester">
+                        <option value="">Select Semester</option>
+                        <option value="1">1st Semester</option>
+                        <option value="2">2nd Semester</option>
+                        <option value="3">3rd Semester</option>
+                        <option value="4">4th Semester</option>
+                        <option value="5">5th Semester</option>
+                        <option value="6">6th Semester</option>
+                        <option value="7">7th Semester</option>
+                        <option value="8">8th Semester</option>
+                    </select>
+                </div>
+            </div>
+            
+            <button type="submit" ng-disabled="studentForm.$invalid || isSubmitting">
+                <span ng-show="isSubmitting">
+                    <span class="spinner"></span>
+                    <span class="loading-text">Submitting...</span>
+                </span>
+                <span ng-show="!isSubmitting">Register</span>
+            </button>
+        </form>
+        
+        <!-- Success Message -->
+        <div class="success-message" ng-show="showSuccess">
+            Registration completed successfully for {{student.firstName}} {{student.lastName}}!
+        </div>
+    </div>
+
+    <script>
+        var app = angular.module('studentRegistrationApp', []);
+        
+        app.controller('StudentController', ['$scope', '$http', '$timeout', function($scope, $http, $timeout) {
+            // Initialize student object
+            $scope.student = {
+                firstName: '',
+                lastName: '',
+                age: null,
+                gender: '',
+                email: '',
+                phone: '',
+                address: '',
+                program: '',
+                semester: ''
+            };
+            
+            $scope.isSubmitting = false;
+            $scope.showSuccess = false;
+            
+            // Set greeting based on time of day
+            function setGreeting() {
+                var currentHour = new Date().getHours();
+                
+                if (currentHour >= 5 && currentHour < 12) {
+                    $scope.timeOfDay = 'morning';
+                } else if (currentHour >= 12 && currentHour < 17) {
+                    $scope.timeOfDay = 'afternoon';
+                } else if (currentHour >= 17 && currentHour < 22) {
+                    $scope.timeOfDay = 'evening';
+                } else {
+                    $scope.timeOfDay = 'night';
+                }
+            }
+            
+            // Call setGreeting on load
+            setGreeting();
+            
+            // Submit form using AJAX
+            $scope.submitForm = function() {
+                if ($scope.studentForm.$valid) {
+                    $scope.isSubmitting = true;
+                    
+                    // Simulate AJAX request with $http
+                    // In a real application, you would make an actual HTTP request to your server
+                    $http({
+                        method: 'POST',
+                        url: 'https://jsonplaceholder.typicode.com/posts', // Demo API for testing
+                        data: $scope.student,
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    }).then(function(response) {
+                        // Success
+                        console.log('Registration successful', response.data);
+                        $scope.isSubmitting = false;
+                        $scope.showSuccess = true;
+                        
+                        // Hide success message after 5 seconds
+                        $timeout(function() {
+                            $scope.showSuccess = false;
+                        }, 5000);
+                        
+                    }, function(error) {
+                        // Error
+                        console.error('Registration failed', error);
+                        $scope.isSubmitting = false;
+                        alert('Registration failed. Please try again later.');
+                    });
+                }
+            };
+        }]);
+    </script>
+</body>
+</html>

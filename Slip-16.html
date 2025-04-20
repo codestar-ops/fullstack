@@ -1,0 +1,43 @@
+Q1not attempted
+
+
+
+
+Q2
+main.js
+
+const EventEmitter = require('events');
+
+// Create an instance of EventEmitter
+const eventEmitter = new EventEmitter();
+
+// Define a callback function
+function greetUser() {
+  console.log('Hello! A user has logged in.');
+}
+
+function fetchData() {
+  console.log('Fetching data from the database...');
+}
+
+function shutdown() {
+  console.log('Application is shutting down...');
+}
+
+// Register the event handlers
+eventEmitter.on('login', greetUser);
+eventEmitter.on('data', fetchData);
+eventEmitter.on('exit', shutdown);
+
+// Simulate the main loop (just for demonstration)
+setTimeout(() => {
+  eventEmitter.emit('login');
+}, 1000);
+
+setTimeout(() => {
+  eventEmitter.emit('data');
+}, 2000);
+
+setTimeout(() => {
+  eventEmitter.emit('exit');
+}, 3000);

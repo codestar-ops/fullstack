@@ -1,0 +1,287 @@
+Q1// Student table
+const mysql = require('mysql');
+
+// Create a connection to the database
+const connection = mysql.createConnection({
+  host: 'localhost',
+  user: 'root',
+  password: '', // Default for XAMPP, change if needed
+  database: 'college' // Replace with your database name
+});
+
+// Connect to the database
+connection.connect((err) => {
+  if (err) throw err;
+  console.log(' Connected to MySQL');
+
+  // Query to select all records from the students table
+  const sql = 'SELECT * FROM students';
+
+  connection.query(sql, (err, result) => {
+    if (err) throw err;
+    console.log('Students Table Records:');
+    console.log(result);
+
+    // Close the connection
+    connection.end();
+  });
+});
+
+
+
+
+
+
+Q2//
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Registration Form</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 25px;
+        }
+        
+        .form-container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        
+        input:focus, select:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
+        }
+        
+        button {
+            background-color: #3498db;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            display: block;
+            width: 100%;
+            margin-top: 10px;
+        }
+        
+        button:hover {
+            background-color: #2980b9;
+        }
+        
+        .error {
+            color: #e74c3c;
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+        
+        .success-message {
+            background-color: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            text-align: center;
+            display: none;
+        }
+        
+        .required::after {
+            content: " *";
+            color: #e74c3c;
+        }
+    </style>
+</head>
+<body>
+    <h1>Employee Registration Form</h1>
+    
+    <div id="success" class="success-message">
+        Registration successful! Employee information has been submitted.
+    </div>
+    
+    <div class="form-container">
+        <form id="employeeForm" onsubmit="return validateForm()">
+            <div class="form-group">
+                <label for="name" class="required">Full Name</label>
+                <input type="text" id="name" name="name" placeholder="Enter full name">
+                <div id="nameError" class="error">Name must contain only letters and spaces (2-50 characters)</div>
+            </div>
+            
+            <div class="form-group">
+                <label for="email" class="required">Email ID</label>
+                <input type="email" id="email" name="email" placeholder="Enter email address">
+                <div id="emailError" class="error">Please enter a valid email address</div>
+            </div>
+            
+            <div class="form-group">
+                <label for="mobile" class="required">Mobile Number</label>
+                <input type="tel" id="mobile" name="mobile" placeholder="Enter 10-digit mobile number">
+                <div id="mobileError" class="error">Please enter a valid 10-digit mobile number</div>
+            </div>
+            
+            <div class="form-group">
+                <label for="department" class="required">Department</label>
+                <select id="department" name="department">
+                    <option value="">Select Department</option>
+                    <option value="IT">Information Technology</option>
+                    <option value="HR">Human Resources</option>
+                    <option value="Finance">Finance</option>
+                    <option value="Marketing">Marketing</option>
+                    <option value="Operations">Operations</option>
+                </select>
+                <div id="departmentError" class="error">Please select a department</div>
+            </div>
+            
+            <div class="form-group">
+                <label for="joiningDate" class="required">Joining Date</label>
+                <input type="date" id="joiningDate" name="joiningDate">
+                <div id="joiningDateError" class="error">Joining date cannot be in the future</div>
+            </div>
+            
+            <div class="form-group">
+                <label for="position">Position</label>
+                <input type="text" id="position" name="position" placeholder="Enter job position">
+            </div>
+            
+            <div class="form-group">
+                <label for="salary">Salary</label>
+                <input type="number" id="salary" name="salary" placeholder="Enter salary amount">
+            </div>
+            
+            <button type="submit">Submit Registration</button>
+        </form>
+    </div>
+
+    <script>
+        // Function to display error message
+        function showError(fieldId, show) {
+            const errorElement = document.getElementById(fieldId + 'Error');
+            if (errorElement) {
+                errorElement.style.display = show ? 'block' : 'none';
+            }
+            
+            if (show) {
+                document.getElementById(fieldId).style.borderColor = '#e74c3c';
+            } else {
+                document.getElementById(fieldId).style.borderColor = '#ddd';
+            }
+        }
+        
+        // Function to validate the form
+        function validateForm() {
+            let isValid = true;
+            
+            // Get form fields
+            const name = document.getElementById('name').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const mobile = document.getElementById('mobile').value.trim();
+            const department = document.getElementById('department').value;
+            const joiningDate = document.getElementById('joiningDate').value;
+            
+            // Regular expressions for validation
+            const nameRegex = /^[A-Za-z\s]{2,50}$/;
+            const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            const mobileRegex = /^[0-9]{10}$/;
+            
+            // Validate name (letters and spaces only, 2-50 characters)
+            if (!nameRegex.test(name)) {
+                showError('name', true);
+                isValid = false;
+            } else {
+                showError('name', false);
+            }
+            
+            // Validate email
+            if (!emailRegex.test(email)) {
+                showError('email', true);
+                isValid = false;
+            } else {
+                showError('email', false);
+            }
+            
+            // Validate mobile (10 digits)
+            if (!mobileRegex.test(mobile)) {
+                showError('mobile', true);
+                isValid = false;
+            } else {
+                showError('mobile', false);
+            }
+            
+            // Validate department selection
+            if (department === '') {
+                showError('department', true);
+                isValid = false;
+            } else {
+                showError('department', false);
+            }
+            
+            // Validate joining date (should not be in the future)
+            if (joiningDate) {
+                const today = new Date();
+                today.setHours(0, 0, 0, 0); // Reset time part for accurate date comparison
+                const joinDate = new Date(joiningDate);
+                
+                if (joinDate > today) {
+                    showError('joiningDate', true);
+                    isValid = false;
+                } else {
+                    showError('joiningDate', false);
+                }
+            } else {
+                showError('joiningDate', true);
+                isValid = false;
+            }
+            
+            // Show success message if form is valid
+            if (isValid) {
+                document.getElementById('success').style.display = 'block';
+                document.getElementById('employeeForm').reset();
+                
+                // Hide success message after 5 seconds
+                setTimeout(() => {
+                    document.getElementById('success').style.display = 'none';
+                }, 5000);
+            }
+            
+            // Return validation result
+            return false; // Prevent actual form submission for this demo
+        }
+    </script>
+</body>
+</html>

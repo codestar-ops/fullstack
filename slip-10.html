@@ -1,0 +1,95 @@
+
+Slip no 10 Q.1 
+
+
+Create File insertStudents.js
+
+run npm init
+
+package name: (fullstack) <press Enter>
+version: (1.0.0) <press Enter>
+description: A fullstack test app <or any description>
+entry point: (index.js) insertStudent.js <or just press Enter if your entry is index.js>
+...
+Is this OK? (yes) <press Enter>
+
+
+
+// npm install mysql
+
+
+
+
+Solution for code
+const mysql = require('mysql');
+
+// Create a connection to the database
+const connection = mysql.createConnection({
+  host: 'localhost',
+  user: 'root',
+  password: '', // default for XAMPP
+  database: 'college'
+});
+
+// Connect to the database
+connection.connect((err) => {
+  if (err) throw err;
+  console.log('✅ Connected to the database.');
+
+  // Insert multiple student records
+  const insertSql = `INSERT INTO student (name, course, age) VALUES 
+    ('John Doe', 'Computer Science', 21), 
+    ('Jane Smith', 'Mathematics', 22), 
+    ('Alice Johnson', 'Physics', 20)`;
+
+  connection.query(insertSql, (err, insertResult) => {
+    if (err) throw err;
+    console.log('✅ Insert result:', insertResult);
+
+    // Now fetch all students
+    const selectSql = `SELECT * FROM student`;
+    connection.query(selectSql, (err, selectResult) => {
+      if (err) throw err;
+      console.log('📄 All students:');
+      console.table(selectResult); // display as table in console
+
+      // Close the connection once all queries are done
+      connection.end();
+    });
+  });
+});
+
+
+
+Q.2
+file 1 =>  modules.js
+
+function getCurrentDateTime() {
+    const now = new Date();
+    return now.toString();
+  }
+  
+  // Export the function
+  module.exports = {
+    getCurrentDateTime
+  };
+
+
+file 2 => 
+// server.js
+
+const http = require('http');
+const myModule = require('./modules'); // Import your custom module
+
+// Create the server
+const server = http.createServer((req, res) => {
+  res.writeHead(200, { 'Content-Type': 'text/plain' });
+  res.write('Hello! The current date and time is:\n');
+  res.write(myModule.getCurrentDateTime()); // Use your module function
+  res.end();
+});
+
+// Server listens on port 3000
+server.listen(3000, () => {
+  console.log('🚀 Server running at http://localhost:3000/');
+});

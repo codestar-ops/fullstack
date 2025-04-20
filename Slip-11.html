@@ -1,0 +1,88 @@
+Q1
+movies.js
+
+const mysql = require('mysql');
+
+// Step 1: Create a connection without specifying a database
+const connection = mysql.createConnection({
+  host: 'localhost',
+  user: 'root',
+  password: '', // leave empty for XAMPP default
+});
+
+// Step 2: Connect to MySQL
+connection.connect((err) => {
+  if (err) throw err;
+  console.log('Connected to MySQL');
+
+  // Step 3: Create a new database called LibraryDB
+  connection.query('CREATE DATABASE IF NOT EXISTS movieDB', (err) => {
+    if (err) throw err;
+    console.log('Database "movieDB" created or already exists.');
+
+    // Step 4: Reconnect with the LibraryDB database selected
+    const db = mysql.createConnection({
+      host: 'localhost',
+      user: 'root',
+      password: '',
+      database: 'movieDB',
+    });
+
+    db.connect((err) => {
+      if (err) throw err;
+
+      // Step 5: Create the 'books' table
+      const createBooksTable = `
+        CREATE TABLE IF NOT EXISTS movie (
+          id INT AUTO_INCREMENT PRIMARY KEY,
+          title VARCHAR(255) NOT NULL,
+          author VARCHAR(255) NOT NULL,
+          published_year INT,
+          genre VARCHAR(100)
+        )
+      `;
+
+      db.query(createBooksTable, (err) => {
+        if (err) throw err;
+        console.log('📖 Table "movie" created successfully.');
+
+        // Step 6: Close the connection
+        db.end();
+      });
+    });
+  });
+});
+
+
+
+
+
+Q2 App.js
+// app.js
+const express = require('express');
+const path = require('path');
+const app = express();
+const PORT = 3000;
+
+app.get('/', (req, res) => {
+  res.send(`
+    <h2>Download File</h2>
+    <a href="/download">Click here to download sample.txt</a>
+  `);
+});
+
+app.get('/download', (req, res) => {
+  const file = path.join(__dirname, 'sample.txt'); // Ensure sample.txt exists
+  res.download(file, 'downloaded-sample.txt', (err) => {
+    if (err) {
+      console.error('Error in downloading file:', err);
+      res.status(500).send('File download failed.');
+    }   
+  });
+});
+app.listen(PORT, () => {
+    console.log(`🚀 Server running at http://localhost:${PORT}`);
+  });
+  // create a new sample.txt in same directory
+
+  

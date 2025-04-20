@@ -1,0 +1,168 @@
+Q1//
+<!DOCTYPE html>
+<html ng-app="syllabusApp">
+<head>
+  <meta charset="UTF-8">
+  <title>M.Sc (CS) Sem-II Syllabus</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular-route.min.js"></script>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    nav a {
+      margin-right: 15px;
+      text-decoration: none;
+      color: #007BFF;
+    }
+    nav a:hover {
+      text-decoration: underline;
+    }
+  </style>
+
+  <script>
+    var app = angular.module("syllabusApp", ["ngRoute"]);
+
+    app.config(function($routeProvider) {
+      $routeProvider
+        .when("/ds", {
+          template: `
+            <h2>Data Structures</h2>
+            <ul>
+              <li>Stacks and Queues</li>
+              <li>Linked Lists</li>
+              <li>Trees and Graphs</li>
+              <li>Hashing and Sorting</li>
+            </ul>
+          `
+        })
+        .when("/os", {
+          template: `
+            <h2>Operating System</h2>
+            <ul>
+              <li>Process Management</li>
+              <li>Memory Management</li>
+              <li>File System</li>
+              <li>Deadlock Handling</li>
+            </ul>
+          `
+        })
+        .when("/cn", {
+          template: `
+            <h2>Computer Networks</h2>
+            <ul>
+              <li>OSI and TCP/IP Models</li>
+              <li>Routing Algorithms</li>
+              <li>Network Protocols</li>
+              <li>Wireless Communication</li>
+            </ul>
+          `
+        })
+        .when("/dbms", {
+          template: `
+            <h2>Database Management System</h2>
+            <ul>
+              <li>ER Modeling</li>
+              <li>Relational Algebra</li>
+              <li>SQL Queries</li>
+              <li>Transaction Management</li>
+            </ul>
+          `
+        })
+        .otherwise({
+          redirectTo: "/ds"
+        });
+    });
+  </script>
+</head>
+<body>
+
+  <h1>M.Sc (CS) Sem-II - Syllabus</h1>
+
+  <nav>
+    <a href="#!/ds">Data Structures</a>
+    <a href="#!/os">Operating System</a>
+    <a href="#!/cn">Computer Networks</a>
+    <a href="#!/dbms">DBMS</a>
+  </nav>
+
+  <div ng-view></div>
+
+</body>
+</html>
+
+
+
+
+
+
+Q2
+<!DOCTYPE html>
+<html ng-app="studentApp">
+<head>
+  <meta charset="UTF-8">
+  <title>Student Details</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      padding: 10px;
+      border: 1px solid #ccc;
+      text-align: left;
+    }
+    th {
+      background-color: #f2f2f2;
+    }
+  </style>
+</head>
+<body ng-controller="StudentController">
+
+  <h1>Student Details</h1>
+
+  <table>
+    <tr>
+      <th>#</th>
+      <th>Name</th>
+      <th>Course</th>
+      <th>Age</th>
+      <th>City</th>
+    </tr>
+    <tr ng-repeat="student in students">
+      <td>{{$index + 1}}</td>
+      <td>{{student.name}}</td>
+      <td>{{student.course}}</td>
+      <td>{{student.age}}</td>
+      <td>{{student.city}}</td>
+    </tr>
+  </table>
+
+  <script>
+    var app = angular.module("studentApp", []);
+    app.controller("StudentController", function($scope) {
+      $scope.students = [
+        { name: 'John Doe', course: 'Computer Science', age: 21, city: 'Pune' },
+        { name: 'Jane Smith', course: 'Mathematics', age: 22, city: 'Mumbai' },
+        { name: 'Alice Johnson', course: 'Physics', age: 20, city: 'Delhi' },
+        { name: 'Bob Brown', course: 'Chemistry', age: 23, city: 'Chennai' },
+        { name: 'David Wilson', course: 'Biology', age: 21, city: 'Bangalore' },
+        { name: 'Eve Davis', course: 'Statistics', age: 22, city: 'Kolkata' },
+        { name: 'Grace Lee', course: 'Electronics', age: 21, city: 'Hyderabad' },
+        { name: 'Henry Clark', course: 'IT', age: 20, city: 'Ahmedabad' },
+        { name: 'Ivy Turner', course: 'Zoology', age: 24, city: 'Jaipur' },
+        { name: 'Jack White', course: 'Botany', age: 22, city: 'Lucknow' }
+      ];
+    });
+  </script>
+
+</body>
+</html>
