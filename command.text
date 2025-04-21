@@ -1,0 +1,22 @@
+install node 
+npm init
+
+node file name.js
+
+
+
+mysql install
+
+npm install mysql
+
+
+
+
+
+
+
+install express
+
+npm init -y
+
+npm install express
